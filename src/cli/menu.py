@@ -1,8 +1,10 @@
+import sqlite3
+
 from src.utils.formatting import separator
 from src.database.connection import show_products
 from src.services.inventory_service import create_product
 
-still_working = ["2", "3", "4", "5"]
+still_working = ["2", "4", "5", "6"]
 
 def menu():
 	separator()
@@ -18,11 +20,11 @@ def menu():
 		separator()
 		print(
 		"1. Add product\n"
-		"(Options below are not ready to use)\n"
 		"2. Register sale\n" 
-		"3. Remove item\n"
-		"4. Report\n"
-		"5. Config")
+		"3. Show Inventory\n"
+		"4. Remove item\n"
+		"5. Report\n"
+		"6. Config")
 		separator()
 		users_choice = input("Enter your choice: ").strip().lower()
 		separator()
@@ -30,9 +32,13 @@ def menu():
 		while users_choice in still_working:
 			print("working on this... you can add a product only rn...")
 			separator()
-			users_choice = input("Enter your choice: ")
+			break
 		while users_choice == "1":
 			create_product()
+			separator()
+			break
+		while users_choice == "3":
+			print("This is your inventory!")
 			separator()
 			show_products()
 			separator()

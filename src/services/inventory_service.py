@@ -12,25 +12,24 @@ def create_product():
     name = input("Name: ")
     cost_price = num_validation("Cost price")
     sale_price = num_validation("Sale price")
-    category = str(Category(input("Category: ")))
+    category = input("Category: ")
     distributor = input("Distributor: ")
     brand = input("Brand: ")
     quantity_type = quantity_type_validation(input("Quantity type (Un/Kg): "))
     quantity = num_validation("Quantity")
     min_stock = num_validation("Minimum stock")
-    expiration_date = date_validation(input("Expiration Date ('Enter' if product doesn't have expiration date): "))
+    expiration_date = date_validation(input("Expiration Date: "))
     product_ = Product( # product1 just demonstration of one item...
-                1, # id still needs change...
                 name, 
-                cost_price, 
+                cost_price,  
                 sale_price,
                 category,
                 distributor, 
                 brand,
-                quantity_type, 
+                quantity_type,
                 quantity,
                 min_stock,
-                datetime.now().strftime("%d/%m/%y - %H:%M"), # Product register time
+                datetime.now().strftime("%d/%m/%y - %H:%M"), # product register time
                 expiration_date
                 )
     

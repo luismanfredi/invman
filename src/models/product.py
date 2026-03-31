@@ -1,6 +1,5 @@
 class Product:
-    def __init__(self, id, name, cost_price, sale_price, category, distributor, brand, quantity_type, quantity, min_stock, registration_date, expiration_date=None, discount=None):
-        self.id = id
+    def __init__(self, name, cost_price, sale_price, category, distributor, brand, quantity_type, quantity, min_stock, registration_date, expiration_date=None, discount=None):
         self.name = name
         self.cost_price = cost_price
         self.sale_price = sale_price
