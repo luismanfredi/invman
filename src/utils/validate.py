@@ -25,12 +25,12 @@ def date_validation(date: str) -> str:
                 print("Invalid date! This date does not exist.")
         date = input("Insert the date again: ")
 
-def quantity_type_validation(quantity_type: str) -> str:
+def unit_type_validation(quantity_type: str) -> str:
    while True:
         type_ = quantity_type.lower()
         if type_ == "kg":
             return "Kg"
         elif type_ == "un":
-            return ""
+            return "Un"
         print("This is not a valid quantity type! Use Kg or Un")
         quantity_type = input("Insert the quantity type again: ")

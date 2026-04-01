@@ -1,5 +1,5 @@
 from src.cli.menu import menu
-from src.database.connection import initialize_database
+from src.database.schema import initialize_database
 
 def main():
     initialize_database()

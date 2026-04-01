@@ -1,0 +1,14 @@
+class Purchase:
+    def __init__(self, supplier_name, purchase_data, id=None):
+        self.id = id
+        self.supplier_name = supplier_name
+        self.purchase_data = purchase_data
+
+class PurchaseItem:
+    def __init__(self, product_id, quantity, unit_cost, expiration_date=None, purchase_id=None, id=None):
+        self.id = id
+        self.purchase_id = purchase_id
+        self.product_id = product_id
+        self.quantity = quantity
+        self.unit_cost = unit_cost
+        self.expiration_date = expiration_date
