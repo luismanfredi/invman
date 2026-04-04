@@ -5,7 +5,7 @@ class Purchase:
         self.purchase_data = purchase_data
 
 class PurchaseItem:
-    def __init__(self, product_id, quantity, unit_cost, expiration_date=None, purchase_id=None, id=None):
+    def __init__(self, quantity, unit_cost, expiration_date=None, purchase_id=None, product_id=None,id=None):
         self.id = id
         self.purchase_id = purchase_id
         self.product_id = product_id

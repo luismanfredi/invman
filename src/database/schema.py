@@ -38,7 +38,7 @@ def create_purchaseitem_table():
     c = conn.cursor()
 
     c.execute(""" 
-        CREATE TABLE IF NOT EXISTS purchase_item (
+        CREATE TABLE IF NOT EXISTS purchase_items (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             purchase_id INTEGER NOT NULL,
             product_id INTEGER NOT NULL,
@@ -71,7 +71,7 @@ def create_saleitem_table():
     c = conn.cursor()
 
     c.execute(""" 
-        CREATE TABLE IF NOT EXISTS sale_item (
+        CREATE TABLE IF NOT EXISTS sale_items (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sale_id INTEGER NOT NULL,
             product_id INTEGER NOT NULL,

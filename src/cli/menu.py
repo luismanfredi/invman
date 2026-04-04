@@ -1,6 +1,6 @@
 from src.utils.formatting import separator
+from src.services.purchase_service import make_purchase
 from src.services.product_service import  register_product, show_products
-
 
 still_working = [...]
 
@@ -33,6 +33,10 @@ def menu():
 			break
 		while users_choice == "1":
 			register_product()
+			separator()
+			break
+		while users_choice == "2":
+			make_purchase()
 			separator()
 			break
 		while users_choice == "4":

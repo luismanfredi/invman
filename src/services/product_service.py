@@ -26,7 +26,7 @@ def register_product():
     insert_product(product)
 
     separator()
-    print("Product registeres successfully")
+    print("Product registered successfully")
 
 def show_products():
     show_products_table()
