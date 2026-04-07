@@ -39,7 +39,22 @@ def show_products_table():
 
     conn.close()
 
-def update_product_stock(product_id, quantity_to_add):
+def product_exists(name: str) -> bool:
+    conn = create_connection()
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT 1 FROM products
+        WHERE name = ?
+        LIMIT 1
+    """, (name,))
+
+    result = c.fetchone()
+    conn.close()
+
+    return result is not None
+
+def increase_product_stock(product_id, quantity_to_add):
     conn = create_connection()
     c = conn.cursor()
     
@@ -48,6 +63,19 @@ def update_product_stock(product_id, quantity_to_add):
         SET stock_quantity = stock_quantity + ?
         WHERE id = ?
     """, (quantity_to_add, product_id))
+
+    conn.commit()
+    conn.close()
+
+def decrease_product_stock(product_id, quantity_to_remove):
+    conn = create_connection()
+    c = conn.cursor()
+
+    c.execute("""
+        UPDATE products
+        SET stock_quantity = stock_quantity - ?
+        WHERE id = ?          
+    """, (quantity_to_remove, product_id))
 
     conn.commit()
     conn.close()
@@ -66,3 +94,72 @@ def get_product_id_by_name(name: str):
     conn.close()
 
     return None if result is None else result[0]
+
+def get_product_name_by_id(product_id):
+    conn = create_connection()
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT name FROM products
+        WHERE id = ?
+        LIMIT 1
+    """, (product_id,))
+
+    result = c.fetchone()
+    conn.close()
+
+    if result is None:
+        return None
+
+    return result[0]
+
+def product_id_exists(product_id):
+    conn = create_connection()
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT 1 FROM products
+        WHERE id = ?
+        LIMIT 1
+    """, (product_id,))
+
+    result = c.fetchone()
+    conn.close()
+
+    return result is not None
+
+def get_selling_price(product_id):
+    conn = create_connection()
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT selling_price FROM products
+        WHERE id = ?
+        LIMIT 1
+    """, (product_id,))
+
+    result = c.fetchone()
+    conn.close()
+
+    if result is None:
+        return None
+
+    return result[0]
+
+def get_product_stock(product_id):
+    conn = create_connection()
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT stock_quantity FROM products
+        WHERE id = ?
+        LIMIT 1
+    """, (product_id,))
+
+    result = c.fetchone()
+    conn.close()
+
+    if result is None:
+        return None
+    
+    return result[0]

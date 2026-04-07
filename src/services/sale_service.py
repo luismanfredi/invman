@@ -1,0 +1,80 @@
+from datetime import datetime
+
+from src.utils.formatting import separator
+from src.models.sale import Sale, SaleItem
+from src.database.sale_queries import insert_sale, insert_saleitem
+from src.utils.validate import num_validation, payment_method_validation
+from src.database.product_queries import get_product_name_by_id, get_selling_price, product_id_exists, decrease_product_stock, get_product_stock
+
+def make_sale():
+    print("Write your sale specification: ")
+    separator()
+    payment_method = payment_method_validation(input("Payment_method: ").strip())
+    while payment_method is None:
+        payment_method = payment_method_validation(input("Payment_method: ").strip())
+    sale_date = datetime.now().strftime("%H:%M:%S - %d/%m/%Y")
+
+    sale = Sale(
+        sale_date=sale_date,
+        payment_method=payment_method
+        )
+    
+    sale_id = insert_sale(sale)
+
+    separator()
+    print("Now enter each product specification.")
+
+    while True:
+        separator()
+        product_id = num_validation("Product Id")
+
+        product = product_id_exists(product_id)
+
+        if product:
+            product_name = get_product_name_by_id(product_id)
+            separator()
+            print(f"Your product is {product_name}")
+            is_correct = input("ENTER if your product is correct, else type anything: ")
+            separator()
+            if is_correct != "":
+                print("Try again.")
+                continue
+        else:
+            print("The product id doesn't exist. Try again!")
+            continue
+
+        unit_price = get_selling_price(product_id)
+        quantity = num_validation("Quantity")
+
+        stock_quantity = get_product_stock(product_id)
+        
+        if quantity > stock_quantity:
+            print("Not enough stock. Try again.")
+            continue
+
+        sale_item = SaleItem(
+            product_id=product_id,
+            quantity=quantity,
+            unit_price=unit_price,
+            sale_id=sale_id
+        )
+
+        insert_saleitem(sale_item)
+
+        decrease_product_stock(
+            product_id=product_id,
+            quantity_to_remove=quantity)
+
+        separator()
+
+        more_products = input("Do you have more products in your sale?(y/n): ").lower()
+
+        if more_products == "yes" or more_products == "y":
+            continue
+        elif more_products == "no" or more_products == "n":
+            break
+        else:
+            print("Invalid option. Ending sale.")
+            break
+
+    print("Your sale has been made!")

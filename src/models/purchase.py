@@ -1,8 +1,8 @@
 class Purchase:
-    def __init__(self, supplier_name, purchase_data, id=None):
+    def __init__(self, supplier_name, purchase_date, id=None):
         self.id = id
         self.supplier_name = supplier_name
-        self.purchase_data = purchase_data
+        self.purchase_data = purchase_date
 
 class PurchaseItem:
     def __init__(self, quantity, unit_cost, expiration_date=None, purchase_id=None, product_id=None,id=None):

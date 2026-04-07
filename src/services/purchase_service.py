@@ -1,14 +1,14 @@
 from datetime import datetime
 
 from src.models.product import Product
-from src.utils.formatting import fmt, separator
+from src.utils.formatting import separator
 from src.models.purchase import Purchase, PurchaseItem
+from src.database.purchase_queries import insert_purchase, insert_purchaseitem
 from src.utils.validate import num_validation, unit_type_validation, date_validation
-from src.database.purchase_queries import insert_purchase, product_exists, insert_purchaseitem
-from src.database.product_queries import get_product_id_by_name, update_product_stock, insert_product
+from src.database.product_queries import get_product_id_by_name, increase_product_stock, insert_product, product_exists
 
 def make_purchase():
-    print("Write your purchase especification: ")
+    print("Write your purchase specification: ")
     separator()
     supplier_name = input("Supplier name: ").strip()
     purchase_date = datetime.now().strftime("%H:%M:%S - %d/%m/%Y")
@@ -22,7 +22,7 @@ def make_purchase():
 
     while True:
         separator()
-        print("Now enter each product especification.")
+        print("Now enter each product specification:")
         separator()
         name = input("Name: ").strip()
 
@@ -31,7 +31,7 @@ def make_purchase():
             product_id = get_product_id_by_name(name)
             separator()
             quantity = num_validation(("Quantity"))
-            update_product_stock(product_id, quantity)
+            increase_product_stock(product_id, quantity)
         else:
             category = input("Category: ").strip()
             brand = input("Brand: ").strip()
@@ -51,11 +51,11 @@ def make_purchase():
 
             product_id = insert_product(product)
 
-            update_product_stock(product_id, quantity)
+            increase_product_stock(product_id, quantity)
         
         
         unit_cost = num_validation("Unit cost")
-        expiration_date = date_validation(input("Expiration_date: "))
+        expiration_date = date_validation(input("Expiration date: "))
 
         
         purchase_item = PurchaseItem(

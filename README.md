@@ -1,25 +1,72 @@
-# Inventory_Manager (Inv_Man)
+# Inventory Manager (Inv_Man)
 
-Inventory Manager is a Python project focused on inventory control and item management.
+A command-line inventory management system built with **Python** and **SQLite**.
 
-## Status
-🚧 Just started working, so... just wait a little...
+This project was created to practice software development fundamentals through a more realistic application structure.  
+The system allows the user to register products, record purchases and sales, and manage stock quantities using a local database.
 
-## Goals
-The project was created aiming to help people with management of items. 
+## Current Features
 
-## Planned features
-- [ ] Add and remove items
-- [ ] Inventory input and output
-- [ ] Sales record
-- [ ] Reports
-- [ ] Low stock alerts
-- [ ] More features coming soon
+- Register new products
+- View inventory
+- Record purchases
+- Record sales
+- Automatically update stock quantities
+- Store data locally with SQLite
 
-## Technologies
+## Project Goal
+
+The goal of this project is to build a functional inventory control system while improving skills in:
+
 - Python
+- SQLite / SQL
+- Project structure and code organization
+- CLI application development
+- Git and GitHub workflow
+
+## Technologies Used
+
+- Python
+- SQLite
 - Git
-- Github
+- GitHub
+
+## Project Structure
+
+```bash
+src/
+├── cli/
+├── database/
+├── models/
+├── services/
+└── utils/
+```
 
 ## How to Run
-Instructions will be added as soon as the first working version is available.
+
+Clone this repository:
+
+```bash
+git clone https://github.com/luismanfredi/invman.git
+```
+
+Enter the project folder:
+
+```bash
+cd Inventory_Manager
+```
+
+(Optional) Create and activate a virtual environment:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+Run the application:
+
+```bash
+python main.py
+```
+
+> If your entry file has a different name, replace `main.py` with the correct file.

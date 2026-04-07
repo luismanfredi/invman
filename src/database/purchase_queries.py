@@ -1,5 +1,5 @@
-from src.models.purchase import Purchase, PurchaseItem
 from src.database.connection import create_connection
+from src.models.purchase import Purchase, PurchaseItem
 
 def insert_purchase(purchase: Purchase):
     conn = create_connection()
@@ -10,7 +10,7 @@ def insert_purchase(purchase: Purchase):
         VALUES (?, ?)
     """, (
         purchase.supplier_name,
-        purchase.purchase_data))
+        purchase.purchase_date))
 
     conn.commit()
     purchase_id = c.lastrowid
@@ -34,20 +34,3 @@ def insert_purchaseitem(purchaseitem: PurchaseItem):
     
     conn.commit()
     conn.close()
-
-def product_exists(name: str) -> bool:
-    conn = create_connection()
-    c = conn.cursor()
-
-    c.execute("""
-        SELECT 1 FROM products
-        WHERE name = ?
-        LIMIT 1
-    """, (name,))
-
-    result = c.fetchone()
-    conn.close()
-
-    print("Result:", result)
-
-    return result is not None

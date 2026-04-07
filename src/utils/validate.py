@@ -34,3 +34,12 @@ def unit_type_validation(quantity_type: str) -> str:
             return "Un"
         print("This is not a valid quantity type! Use Kg or Un")
         quantity_type = input("Insert the quantity type again: ")
+
+def payment_method_validation(payment_method: str):
+    methods_available = ["debit card", "credit card", "cash"]
+
+    if payment_method.lower() not in methods_available:
+        print("Payment not available. Use a Debit Card, Credit Card or Cash")
+        return None
+    else:
+        return payment_method

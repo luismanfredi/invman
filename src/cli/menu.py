@@ -1,8 +1,9 @@
 from src.utils.formatting import separator
+from src.services.sale_service import make_sale
 from src.services.purchase_service import make_purchase
 from src.services.product_service import  register_product, show_products
 
-still_working = [...]
+still_working = ["5", "6"]
 
 def menu():
 	separator()
@@ -21,14 +22,14 @@ def menu():
 		"2. Register Purchase\n" 
 		"3. Register Sale\n"
 		"4. Show Inventory\n"
-		"5. Report\n"
-		"6. Config")
+		"5. 🚧 Report\n"
+		"6. 🚧 Config")
 		separator()
 		users_choice = input("Enter your choice: ").strip().lower()
 		separator()
 
 		while users_choice in still_working:
-			print("working on this... you can add a product only rn...")
+			print("🚧 Still Working!! 🚧")
 			separator()
 			break
 		while users_choice == "1":
@@ -37,6 +38,10 @@ def menu():
 			break
 		while users_choice == "2":
 			make_purchase()
+			separator()
+			break
+		while users_choice == "3":
+			make_sale()
 			separator()
 			break
 		while users_choice == "4":
