@@ -67,7 +67,8 @@ def make_sale():
 
             decrease_product_stock(
                 product_id=product_id,
-                quantity_to_remove=quantity)
+                quantity_to_remove=quantity,
+                conn=conn)
 
             separator()
 
