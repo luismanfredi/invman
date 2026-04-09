@@ -1,4 +1,4 @@
-# Inventory Manager (Inv_Man)
+# Inventory Manager (Inv_Man 👓)
 
 A command-line inventory management system built with **Python** and **SQLite**.
 

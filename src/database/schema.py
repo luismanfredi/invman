@@ -1,6 +1,6 @@
 from src.database.connection import create_connection
 
-def create_product_table():
+def create_products_table():
     conn = create_connection()
     c = conn.cursor()
 
@@ -19,7 +19,7 @@ def create_product_table():
     conn.commit()
     conn.close()
 
-def create_purchase_table():
+def create_purchases_table():
     conn = create_connection()
     c = conn.cursor()
 
@@ -33,7 +33,7 @@ def create_purchase_table():
     conn.commit()
     conn.close()
 
-def create_purchaseitem_table():
+def create_purchaseitems_table():
     conn = create_connection()
     c = conn.cursor()
 
@@ -52,7 +52,7 @@ def create_purchaseitem_table():
     conn.commit()
     conn.close()
 
-def create_sale_table():
+def create_sales_table():
     conn = create_connection()
     c = conn.cursor()
 
@@ -66,7 +66,7 @@ def create_sale_table():
     conn.commit()
     conn.close()
 
-def create_saleitem_table():
+def create_saleitems_table():
     conn = create_connection()
     c = conn.cursor()
 
@@ -86,8 +86,8 @@ def create_saleitem_table():
 
 def initialize_database():
     create_connection()
-    create_product_table()
-    create_purchase_table()
-    create_purchaseitem_table()
-    create_sale_table()
-    create_saleitem_table()
+    create_products_table()
+    create_purchases_table()
+    create_purchaseitems_table()
+    create_sales_table()
+    create_saleitems_table()

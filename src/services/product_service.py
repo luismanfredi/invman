@@ -45,4 +45,12 @@ def register_product():
         conn.close()
 
 def show_products():
-    show_products_table()
+    conn = create_connection()
+    try:
+        show_products_table(conn)
+    except sqlite3.Error as e:
+        separator()
+        print(f"Error: {e}")
+    finally:
+        conn.close()
+    

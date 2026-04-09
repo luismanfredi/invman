@@ -1,5 +1,4 @@
 from src.models.sale import Sale, SaleItem
-from src.database.connection import create_connection
 
 def insert_sale(sale: Sale, conn) -> int:
     c = conn.cursor()
@@ -27,3 +26,26 @@ def insert_saleitem(saleitem: SaleItem, conn):
         saleitem.unit_price,
         saleitem.quantity
     ))
+
+def show_sales_table(conn):
+    c = conn.cursor()
+
+    c.execute("""
+        SELECT id, sale_date, payment_method
+        FROM sales""")
+    rows = c.fetchall()
+
+    if not rows:
+        print("No registered sales!")
+        return
+    
+    print("=" * 50)
+    print(f"{'ID':<4} {'Date':<25} {'Payment Method':<10}")
+    print("=" * 50)
+
+    for row in rows:
+        id_, sale_date, payment_method = row
+
+        print(f"{id_:<4} {sale_date:<25} {payment_method.capitalize():<10}")
+
+    print("=" * 50)

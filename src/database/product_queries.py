@@ -1,5 +1,4 @@
 from src.models.product import Product
-from src.database.connection import create_connection
 
 def insert_product(product: Product, conn):
     c = conn.cursor()
@@ -20,21 +19,29 @@ def insert_product(product: Product, conn):
 
     return product_id
 
-def show_products_table():
-    conn = create_connection()
+def show_products_table(conn):
     c = conn.cursor()
 
-    c.execute("SELECT * FROM products")
+    c.execute("""
+        SELECT id, name, category, brand, unit_type, stock_quantity, min_stock, selling_price
+        FROM products""")
     rows = c.fetchall()
 
     if not rows:
         print("Inventory is empty")
         return
+    
+    print("=" * 95)
+    print(f"{'ID':<4} {'Name':<15} {'Category':<15} {'Brand':<15} {'Unit':<8} {'Stock':<10} {'Min':<10} {'Price':<10}")
+    print("=" * 95)
 
     for row in rows:
-        print(row)
+        id_, name, category, brand, unit_type, stock, min_stock, price = row
+        price_display = f"{price:.2f}" if price is not None else "N/A"
 
-    conn.close()
+        print(f"{id_:<4} {name:<15} {category:<15} {brand:<15} {unit_type:<8} {stock:<10} {min_stock:<10} {price_display:<10}")
+
+    print("=" * 95)
 
 def product_exists(name: str, conn) -> bool:
     c = conn.cursor()

@@ -4,8 +4,8 @@ from datetime import datetime
 from src.utils.formatting import separator
 from src.models.sale import Sale, SaleItem
 from src.database.connection import create_connection
-from src.database.sale_queries import insert_sale, insert_saleitem
 from src.utils.validate import num_validation, payment_method_validation
+from src.database.sale_queries import insert_sale, insert_saleitem, show_sales_table
 from src.database.product_queries import get_product_name_by_id, get_selling_price, product_id_exists, decrease_product_stock, get_product_stock
 
 def make_sale():
@@ -90,5 +90,15 @@ def make_sale():
     else:
         separator()
         print("Your sale has been made!")
+    finally:
+        conn.close()
+
+def show_sales():
+    conn = create_connection()
+    try:
+        show_sales_table(conn)
+    except sqlite3.Error as e:
+        separator()
+        print(f"Error: {e}")
     finally:
         conn.close()

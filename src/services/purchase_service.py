@@ -5,8 +5,8 @@ from src.models.product import Product
 from src.utils.formatting import separator
 from src.database.connection import create_connection
 from src.models.purchase import Purchase, PurchaseItem
-from src.database.purchase_queries import insert_purchase, insert_purchaseitem
 from src.utils.validate import num_validation, unit_type_validation, date_validation
+from src.database.purchase_queries import insert_purchase, insert_purchaseitem, show_purchases_table
 from src.database.product_queries import get_product_id_by_name, increase_product_stock, insert_product, product_exists
 
 def make_purchase():
@@ -90,5 +90,15 @@ def make_purchase():
     else:
         separator()
         print("Purchase completed successfully!")
+    finally:
+        conn.close()
+
+def show_purchases():
+    conn = create_connection()
+    try:
+        show_purchases_table(conn)
+    except sqlite3.Error as e:
+        separator()
+        print(f"Error: {e}")
     finally:
         conn.close()
