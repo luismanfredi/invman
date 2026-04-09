@@ -1,8 +1,7 @@
 from src.database.connection import create_connection
 from src.models.purchase import Purchase, PurchaseItem
 
-def insert_purchase(purchase: Purchase):
-    conn = create_connection()
+def insert_purchase(purchase: Purchase, conn):
     c = conn.cursor()
 
     c.execute("""
@@ -11,15 +10,12 @@ def insert_purchase(purchase: Purchase):
     """, (
         purchase.supplier_name,
         purchase.purchase_date))
-
-    conn.commit()
+    
     purchase_id = c.lastrowid
-    conn.close()
 
     return purchase_id
 
-def insert_purchaseitem(purchaseitem: PurchaseItem):
-    conn = create_connection()
+def insert_purchaseitem(purchaseitem: PurchaseItem, conn):
     c = conn.cursor()
     
     c.execute("""
@@ -31,6 +27,3 @@ def insert_purchaseitem(purchaseitem: PurchaseItem):
         purchaseitem.quantity,
         purchaseitem.unit_cost,
         purchaseitem.expiration_date))
-    
-    conn.commit()
-    conn.close()

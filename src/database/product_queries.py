@@ -1,8 +1,7 @@
 from src.models.product import Product
 from src.database.connection import create_connection
 
-def insert_product(product: Product):
-    conn = create_connection()
+def insert_product(product: Product, conn):
     c = conn.cursor()
 
     c.execute("""
@@ -17,9 +16,7 @@ def insert_product(product: Product):
             product.min_stock, 
             product.selling_price))
 
-    conn.commit()
-    product_id = c.lastrowid
-    conn.close()
+    product_id = c.lastrowid 
 
     return product_id
 
@@ -39,8 +36,7 @@ def show_products_table():
 
     conn.close()
 
-def product_exists(name: str) -> bool:
-    conn = create_connection()
+def product_exists(name: str, conn) -> bool:
     c = conn.cursor()
 
     c.execute("""
@@ -50,12 +46,10 @@ def product_exists(name: str) -> bool:
     """, (name,))
 
     result = c.fetchone()
-    conn.close()
 
     return result is not None
 
-def increase_product_stock(product_id, quantity_to_add):
-    conn = create_connection()
+def increase_product_stock(product_id, quantity_to_add, conn):
     c = conn.cursor()
     
     c.execute("""
@@ -64,11 +58,7 @@ def increase_product_stock(product_id, quantity_to_add):
         WHERE id = ?
     """, (quantity_to_add, product_id))
 
-    conn.commit()
-    conn.close()
-
-def decrease_product_stock(product_id, quantity_to_remove):
-    conn = create_connection()
+def decrease_product_stock(product_id, quantity_to_remove, conn):
     c = conn.cursor()
 
     c.execute("""
@@ -77,11 +67,7 @@ def decrease_product_stock(product_id, quantity_to_remove):
         WHERE id = ?          
     """, (quantity_to_remove, product_id))
 
-    conn.commit()
-    conn.close()
-
-def get_product_id_by_name(name: str):
-    conn = create_connection()
+def get_product_id_by_name(name: str, conn):
     c = conn.cursor()
 
     c.execute("""
@@ -91,12 +77,10 @@ def get_product_id_by_name(name: str):
     """, (name,))
     
     result = c.fetchone()
-    conn.close()
 
     return None if result is None else result[0]
 
-def get_product_name_by_id(product_id):
-    conn = create_connection()
+def get_product_name_by_id(product_id, conn):
     c = conn.cursor()
 
     c.execute("""
@@ -106,15 +90,13 @@ def get_product_name_by_id(product_id):
     """, (product_id,))
 
     result = c.fetchone()
-    conn.close()
 
     if result is None:
         return None
 
     return result[0]
 
-def product_id_exists(product_id):
-    conn = create_connection()
+def product_id_exists(product_id, conn):
     c = conn.cursor()
 
     c.execute("""
@@ -124,12 +106,10 @@ def product_id_exists(product_id):
     """, (product_id,))
 
     result = c.fetchone()
-    conn.close()
 
     return result is not None
 
-def get_selling_price(product_id):
-    conn = create_connection()
+def get_selling_price(product_id, conn):
     c = conn.cursor()
 
     c.execute("""
@@ -139,15 +119,13 @@ def get_selling_price(product_id):
     """, (product_id,))
 
     result = c.fetchone()
-    conn.close()
 
     if result is None:
         return None
 
     return result[0]
 
-def get_product_stock(product_id):
-    conn = create_connection()
+def get_product_stock(product_id, conn):
     c = conn.cursor()
 
     c.execute("""
@@ -157,7 +135,6 @@ def get_product_stock(product_id):
     """, (product_id,))
 
     result = c.fetchone()
-    conn.close()
 
     if result is None:
         return None

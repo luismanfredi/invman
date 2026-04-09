@@ -3,15 +3,17 @@ from datetime import datetime
 
 from src.utils.formatting import fmt
 
-def num_validation(variable_name: str) -> float | int:
+def num_validation(num: str):
     while True:
         try:
-            num = float(input(f"{variable_name}: "))
+            num = float(num)
             if num >= 0:
                 return fmt(num)
-            print(f"Your {variable_name.lower()} needs to be greater than or equal zero.")
+            print("This number needs to be greater than or equal zero. Try again!")
         except ValueError:
-            print("Enter a valid number")
+            print("Enter a valid number.")
+
+        num = input("Enter the number again: ")
 
 def date_validation(date: str) -> str:
     while True:

@@ -1,36 +1,48 @@
+import sqlite3
+
 from src.models.product import Product
 from src.utils.formatting import separator
+from src.database.connection import create_connection
 from src.utils.validate import num_validation, unit_type_validation
 from src.database.product_queries import insert_product, show_products_table, product_exists
 
 def register_product():
-    print("Please write your product specifications:")
-    separator()
-    name = input("Name: ").lower().strip()
-    if product_exists(name):
+    conn = create_connection()
+    try:
+        print("Please write your product specifications:")
         separator()
-        print("The product already exists. Use Register Purchase to add stock.")
+        name = input("Name: ").lower().strip()
+        if product_exists(name, conn):
+            separator()
+            print("The product already exists. Use Register Purchase to add stock.")
+        else:
+            category = input("Category: ").strip()
+            brand = input("Brand: ").strip()
+            unit_type = unit_type_validation(input("Unit type: ").strip())
+            stock_quantity = num_validation(input("Stock quantity: "))
+            min_stock = num_validation(input("Minimum stock: "))
+            selling_price = num_validation(input("Selling price: "))
+            product = Product(
+                name=name,
+                category=category,
+                brand=brand,
+                unit_type=unit_type,
+                selling_price=selling_price,
+                stock_quantity=stock_quantity,
+                min_stock=min_stock,
+                )
+            
+            insert_product(product, conn)
+        conn.commit()
+    except sqlite3.Error as e:
+        separator()
+        print(f"Error: {e}")
+        conn.rollback()
     else:
-        category = input("Category: ").strip()
-        brand = input("Brand: ").strip()
-        unit_type = unit_type_validation(input("Unit type: ").strip())
-        stock_quantity = num_validation(("Stock quantity"))
-        min_stock = num_validation(("Minimum stock").strip())
-        selling_price = num_validation(("Selling price").strip())
-        product = Product(
-            name=name,
-            category=category,
-            brand=brand,
-            unit_type=unit_type,
-            selling_price=selling_price,
-            stock_quantity=stock_quantity,
-            min_stock=min_stock,
-            )
-        
-        insert_product(product)
-
         separator()
         print("Product registered successfully!")
+    finally:
+        conn.close()
 
 def show_products():
     show_products_table()

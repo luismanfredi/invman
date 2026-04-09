@@ -1,8 +1,7 @@
 from src.models.sale import Sale, SaleItem
 from src.database.connection import create_connection
 
-def insert_sale(sale: Sale) -> int:
-    conn = create_connection()
+def insert_sale(sale: Sale, conn) -> int:
     c = conn.cursor()
 
     c.execute("""
@@ -12,14 +11,11 @@ def insert_sale(sale: Sale) -> int:
     sale.sale_date,
     sale.payment_method))
 
-    conn.commit()
     sale_id = c.lastrowid
-    conn.close()
 
     return sale_id
 
-def insert_saleitem(saleitem: SaleItem):
-    conn = create_connection()
+def insert_saleitem(saleitem: SaleItem, conn):
     c = conn.cursor()
 
     c.execute("""
@@ -31,7 +27,3 @@ def insert_saleitem(saleitem: SaleItem):
         saleitem.unit_price,
         saleitem.quantity
     ))
-
-    conn.commit()
-    conn.close()
-
