@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.1.2] - 2026-04-13
+### Changed
+- Improved README structure and documentation
+- Formatted project code with Black
+
 ## [v1.1.1] - 2026-04-13
 ### Added
 - Improved services and database flow

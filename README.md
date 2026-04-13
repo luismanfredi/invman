@@ -34,13 +34,23 @@ The goal of this project is to build a functional inventory control system while
 ## Project Structure
 
 ```bash
-src/
-├── cli/
-├── database/
-├── models/
-├── services/
-└── utils/
+invman/
+├── assets/      # Images used in the README
+├── src/
+│   ├── cli/        # Menu and terminal interaction
+│   ├── database/   # SQLite connection and query functions
+│   ├── models/     # System entity classes
+│   ├── services/   # Business logic and application flows
+│   └── utils/      # Formatting and validation helpers
+├── README.md
+├── CHANGELOG.md
+├── requirements.txt
+└── .gitignore
 ```
+
+## Terminal Preview
+
+![Inventory Manager terminal preview](assets/terminal-demo.png)
 
 ## How to Run
 

@@ -4,7 +4,12 @@ from src.models.product import Product
 from src.utils.formatting import separator
 from src.database.connection import create_connection
 from src.utils.validate import num_validation, unit_type_validation
-from src.database.product_queries import insert_product, show_products_table, product_exists
+from src.database.product_queries import (
+    insert_product,
+    show_products_table,
+    product_exists,
+)
+
 
 def register_product():
     while True:
@@ -14,7 +19,7 @@ def register_product():
             separator()
             print("The product already exists. Use Register Purchase to add stock.")
             return
-        
+
         review_choice = review_product_data(product)
 
         if review_choice == "2":
@@ -25,11 +30,11 @@ def register_product():
         if review_choice == "3":
             print("Product registration canceled.")
             return
-        
+
         conn = None
         try:
             conn = create_connection()
-                
+
             insert_product(product, conn)
             conn.commit()
 
@@ -46,6 +51,7 @@ def register_product():
                 conn.close()
 
         return
+
 
 def collect_product_data():
     print("Please write your product specifications:")
@@ -67,8 +73,9 @@ def collect_product_data():
         unit_type=unit_type,
         selling_price=selling_price,
         stock_quantity=stock_quantity,
-        min_stock=min_stock
-        )
+        min_stock=min_stock,
+    )
+
 
 def product_already_exists(name: str):
     conn = create_connection()
@@ -84,24 +91,21 @@ def product_already_exists(name: str):
     finally:
         conn.close()
 
+
 def review_product_data(product: Product):
     separator()
     print("Review product data:")
     print(
-    f"1. Name: {product.name}\n"
-    f"2. Category: {product.category}\n"
-    f"3. Brand: {product.brand}\n"
-    f"4. Unit type: {product.unit_type}\n"
-    f"5. Stock quantity: {product.stock_quantity}\n"
-    f"6. Minimum Stock: {product.min_stock}\n"
-    f"7. Selling price: {product.selling_price}"
+        f"1. Name: {product.name}\n"
+        f"2. Category: {product.category}\n"
+        f"3. Brand: {product.brand}\n"
+        f"4. Unit type: {product.unit_type}\n"
+        f"5. Stock quantity: {product.stock_quantity}\n"
+        f"6. Minimum Stock: {product.min_stock}\n"
+        f"7. Selling price: {product.selling_price}"
     )
     separator()
-    print(
-        "1. Confirm\n"
-        "2. Re-enter product data\n"
-        "3. Cancel"
-    )
+    print("1. Confirm\n" "2. Re-enter product data\n" "3. Cancel")
     separator()
 
     while True:
@@ -123,4 +127,3 @@ def show_products():
         print(f"Error: {e}")
     finally:
         conn.close()
-    

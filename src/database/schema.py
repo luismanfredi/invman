@@ -1,5 +1,6 @@
 from src.database.connection import create_connection
 
+
 def create_products_table():
     conn = create_connection()
     c = conn.cursor()
@@ -15,10 +16,11 @@ def create_products_table():
             min_stock REAL NOT NULL DEFAULT 0 CHECK(min_stock >= 0),
             selling_price REAL CHECK(selling_price IS NULL OR selling_price >=0),
             UNIQUE(name, brand, unit_type)
-        )""") 
+        )""")
 
     conn.commit()
     conn.close()
+
 
 def create_purchases_table():
     conn = create_connection()
@@ -33,6 +35,7 @@ def create_purchases_table():
 
     conn.commit()
     conn.close()
+
 
 def create_purchaseitems_table():
     conn = create_connection()
@@ -53,6 +56,7 @@ def create_purchaseitems_table():
     conn.commit()
     conn.close()
 
+
 def create_sales_table():
     conn = create_connection()
     c = conn.cursor()
@@ -62,10 +66,11 @@ def create_sales_table():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sale_date TEXT NOT NULL,
             payment_method TEXT NOT NULL CHECK(payment_method IN ('cash', 'debit card', 'credit card'))
-        )""") 
+        )""")
 
     conn.commit()
     conn.close()
+
 
 def create_saleitems_table():
     conn = create_connection()
@@ -84,6 +89,7 @@ def create_saleitems_table():
 
     conn.commit()
     conn.close()
+
 
 def initialize_database():
     create_connection()

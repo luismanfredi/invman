@@ -3,6 +3,7 @@ from datetime import datetime
 
 from src.utils.formatting import fmt
 
+
 def num_validation(num: str):
     while True:
         try:
@@ -15,20 +16,22 @@ def num_validation(num: str):
 
         num = input("Enter the number again: ")
 
+
 def date_validation(date: str) -> str:
     while True:
-        if not re.fullmatch(r'\d{2}/\d{2}/\d{2}', date):
+        if not re.fullmatch(r"\d{2}/\d{2}/\d{2}", date):
             print("Invalid format! Use: DD/MM/YY")
         else:
             try:
                 data = datetime.strptime(date, "%d/%m/%y")
-                return data.strftime('%d/%m/%y')
+                return data.strftime("%d/%m/%y")
             except ValueError:
                 print("Invalid date! This date does not exist.")
         date = input("Insert the date again: ")
 
+
 def unit_type_validation(quantity_type: str) -> str:
-   while True:
+    while True:
         type_ = quantity_type.lower()
         if type_ == "kg":
             return "Kg"
@@ -36,6 +39,7 @@ def unit_type_validation(quantity_type: str) -> str:
             return "Un"
         print("This is not a valid quantity type! Use Kg or Un")
         quantity_type = input("Insert the quantity type again: ")
+
 
 def payment_method_validation(payment_method: str):
     methods_available = ["debit card", "credit card", "cash"]
@@ -45,7 +49,8 @@ def payment_method_validation(payment_method: str):
         return None
     else:
         return payment_method
-    
+
+
 def id_validation(id):
     while True:
         try:
@@ -56,5 +61,5 @@ def id_validation(id):
                 print("Id need to be greater than zero.")
         except ValueError:
             print("Id can only be integers.")
-        
-        id = input("Enter the id again: ")     
+
+        id = input("Enter the id again: ")

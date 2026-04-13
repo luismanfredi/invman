@@ -4,6 +4,7 @@ class Sale:
         self.sale_date = sale_date
         self.payment_method = payment_method
 
+
 class SaleItem:
     def __init__(self, product_id, quantity, unit_price, sale_id=None, id=None):
         self.id = id

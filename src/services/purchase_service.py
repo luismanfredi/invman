@@ -6,8 +6,18 @@ from src.utils.formatting import separator
 from src.database.connection import create_connection
 from src.models.purchase import Purchase, PurchaseItem
 from src.utils.validate import num_validation, unit_type_validation, date_validation
-from src.database.purchase_queries import insert_purchase, insert_purchaseitem, show_purchases_table
-from src.database.product_queries import get_product_id_by_name, increase_product_stock, insert_product, product_exists
+from src.database.purchase_queries import (
+    insert_purchase,
+    insert_purchaseitem,
+    show_purchases_table,
+)
+from src.database.product_queries import (
+    get_product_id_by_name,
+    increase_product_stock,
+    insert_product,
+    product_exists,
+)
+
 
 def make_purchase():
     conn = create_connection()
@@ -18,11 +28,8 @@ def make_purchase():
         supplier_name = input("Supplier name: ").strip()
         purchase_date = datetime.now().strftime("%H:%M:%S - %d/%m/%Y")
 
-        purchase = Purchase(
-                supplier_name=supplier_name,
-                purchase_date=purchase_date
-        )
-        
+        purchase = Purchase(supplier_name=supplier_name, purchase_date=purchase_date)
+
         purchase_id = insert_purchase(purchase, conn)
 
         while True:
@@ -32,26 +39,27 @@ def make_purchase():
                 print("Product step canceled.")
                 separator()
                 continue
-            
+
             quantity = num_validation(input("Quantity: "))
             unit_cost = num_validation(input("Unit cost: "))
             expiration_date = date_validation(input("Expiration date: "))
 
             increase_product_stock(product_id, quantity, conn)
 
-            
             purchase_item = PurchaseItem(
                 quantity=quantity,
                 unit_cost=unit_cost,
                 expiration_date=expiration_date,
                 product_id=product_id,
-                purchase_id=purchase_id
+                purchase_id=purchase_id,
             )
 
             insert_purchaseitem(purchase_item, conn)
 
             separator()
-            more_products = input("Do you have more products in your purchase?(y/n): ").lower()
+            more_products = input(
+                "Do you have more products in your purchase?(y/n): "
+            ).lower()
 
             if more_products in ["y", "yes"]:
                 continue
@@ -71,6 +79,7 @@ def make_purchase():
         print("Purchase completed successfully!")
     finally:
         conn.close()
+
 
 def get_or_create_product(conn):
     separator()
@@ -99,6 +108,7 @@ def get_or_create_product(conn):
 
     return insert_product(product, conn)
 
+
 def collect_new_product_data(name: str):
     category = input("Category: ").strip()
     brand = input("Brand: ").strip()
@@ -113,8 +123,9 @@ def collect_new_product_data(name: str):
         unit_type=unit_type,
         selling_price=selling_price,
         stock_quantity=0,
-        min_stock=min_stock
+        min_stock=min_stock,
     )
+
 
 def review_product_data(product: Product):
     separator()
@@ -128,11 +139,7 @@ def review_product_data(product: Product):
         f"6. Selling price: {product.selling_price}"
     )
     separator()
-    print(
-        "1. Confirm\n"
-        "2. Re-enter product data\n"
-        "3. Cancel"
-    )
+    print("1. Confirm\n" "2. Re-enter product data\n" "3. Cancel")
     separator()
 
     while True:
