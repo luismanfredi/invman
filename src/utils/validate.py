@@ -45,3 +45,16 @@ def payment_method_validation(payment_method: str):
         return None
     else:
         return payment_method
+    
+def id_validation(id):
+    while True:
+        try:
+            id = int(id)
+            if id > 0:
+                return id
+            else:
+                print("Id need to be greater than zero.")
+        except ValueError:
+            print("Id can only be integers.")
+        
+        id = input("Enter the id again: ")     

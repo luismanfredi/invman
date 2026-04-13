@@ -4,18 +4,19 @@ from datetime import datetime
 from src.utils.formatting import separator
 from src.models.sale import Sale, SaleItem
 from src.database.connection import create_connection
-from src.utils.validate import num_validation, payment_method_validation
 from src.database.sale_queries import insert_sale, insert_saleitem, show_sales_table
+from src.utils.validate import num_validation, payment_method_validation, id_validation
 from src.database.product_queries import get_product_name_by_id, get_selling_price, product_id_exists, decrease_product_stock, get_product_stock
 
 def make_sale():
     conn = create_connection()
+    sales = 0
     try:
         print("Write your sale specification: ")
         separator()
-        payment_method = payment_method_validation(input("Payment_method: ").strip())
+        payment_method = payment_method_validation(input("Payment method: ").strip())
         while payment_method is None:
-            payment_method = payment_method_validation(input("Payment_method: ").strip())
+            payment_method = payment_method_validation(input("Payment method: ").strip())
         sale_date = datetime.now().strftime("%H:%M:%S - %d/%m/%Y")
 
         sale = Sale(
@@ -23,14 +24,12 @@ def make_sale():
             payment_method=payment_method
             )
         
-        sale_id = insert_sale(sale, conn)
-
         separator()
         print("Now enter each product specification.")
 
         while True:
             separator()
-            product_id = num_validation(input("Product Id: "))
+            product_id = id_validation(input("Product Id: "))
 
             product = product_id_exists(product_id, conn)
 
@@ -38,11 +37,16 @@ def make_sale():
                 product_name = get_product_name_by_id(product_id, conn)
                 separator()
                 print(f"Your product is {product_name}")
-                is_correct = input("Type ENTER if your product is correct, else type anything: ")
+                is_correct = input("Confirm product?(y/n) ").lower()
                 separator()
-                if is_correct != "":
+                if is_correct in ["y", "yes"]:
+                    pass
+                elif is_correct in ["n", "no"]:
                     print("Try again.")
                     continue
+                else:
+                    print("Invalid command.")
+                    break
             else:
                 print("The product id doesn't exist. Try again!")
                 continue
@@ -55,6 +59,9 @@ def make_sale():
             if quantity > stock_quantity:
                 print("Not enough stock. Try again.")
                 continue
+            
+            if sales == 0:
+                sale_id = insert_sale(sale, conn)
 
             sale_item = SaleItem(
                 product_id=product_id,
@@ -72,7 +79,8 @@ def make_sale():
 
             separator()
 
-            more_products = input("Do you have more products in your sale?(y/n): ").lower()
+            sales += 1
+            more_products = input("Do you have more products in your sale?(y/n): ").strip().lower()
 
             if more_products == "yes" or more_products == "y":
                 continue
@@ -88,8 +96,9 @@ def make_sale():
         print(f"Error: {e}")
         conn.rollback()
     else:
-        separator()
-        print("Your sale has been made!")
+        if sales > 0:
+            separator()
+            print("Sale completed successfully!")
     finally:
         conn.close()
 

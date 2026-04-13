@@ -11,9 +11,10 @@ def create_products_table():
             category TEXT NOT NULL,
             brand TEXT NOT NULL,
             unit_type TEXT NOT NULL,
-            stock_quantity REAL NOT NULL DEFAULT 0,
-            min_stock REAL NOT NULL DEFAULT 0,
-            selling_price REAL NOT NULL
+            stock_quantity REAL NOT NULL DEFAULT 0 CHECK(stock_quantity >= 0),
+            min_stock REAL NOT NULL DEFAULT 0 CHECK(min_stock >= 0),
+            selling_price REAL CHECK(selling_price IS NULL OR selling_price >=0),
+            UNIQUE(name, brand, unit_type)
         )""") 
 
     conn.commit()
@@ -42,8 +43,8 @@ def create_purchaseitems_table():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             purchase_id INTEGER NOT NULL,
             product_id INTEGER NOT NULL,
-            quantity REAL NOT NULL,
-            unit_cost REAL NOT NULL,
+            quantity REAL NOT NULL CHECK(quantity > 0),
+            unit_cost REAL NOT NULL CHECK(unit_cost >= 0),
             expiration_date TEXT,
             FOREIGN KEY (purchase_id) REFERENCES purchases(id),
             FOREIGN KEY (product_id) REFERENCES products(id)
@@ -60,7 +61,7 @@ def create_sales_table():
         CREATE TABLE IF NOT EXISTS sales (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sale_date TEXT NOT NULL,
-            payment_method TEXT NOT NULL
+            payment_method TEXT NOT NULL CHECK(payment_method IN ('cash', 'debit card', 'credit card'))
         )""") 
 
     conn.commit()
@@ -75,8 +76,8 @@ def create_saleitems_table():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sale_id INTEGER NOT NULL,
             product_id INTEGER NOT NULL,
-            unit_price REAL NOT NULL,
-            quantity REAL NOT NULL,
+            unit_price REAL NOT NULL CHECK(unit_price >= 0),
+            quantity REAL NOT NULL CHECK(quantity > 0),
             FOREIGN KEY (sale_id) REFERENCES sales(id),
             FOREIGN KEY (product_id) REFERENCES products(id)
         )""")

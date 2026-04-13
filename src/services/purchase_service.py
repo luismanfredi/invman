@@ -11,8 +11,9 @@ from src.database.product_queries import get_product_id_by_name, increase_produc
 
 def make_purchase():
     conn = create_connection()
+
     try:
-        print("Write your purchase specification: ")
+        print("Write your purchase specification:")
         separator()
         supplier_name = input("Supplier name: ").strip()
         purchase_date = datetime.now().strftime("%H:%M:%S - %d/%m/%Y")
@@ -20,46 +21,23 @@ def make_purchase():
         purchase = Purchase(
                 supplier_name=supplier_name,
                 purchase_date=purchase_date
-                )
+        )
         
         purchase_id = insert_purchase(purchase, conn)
 
         while True:
-            separator()
-            print("Now enter each product specification:")
-            separator()
-            name = input("Name: ").strip()
+            product_id = get_or_create_product(conn)
 
-            if product_exists(name, conn):
-                print("The product already exists")
-                product_id = get_product_id_by_name(name, conn)
+            if product_id is None:
+                print("Product step canceled.")
                 separator()
-                quantity = num_validation(input("Quantity: "))
-                increase_product_stock(product_id, quantity, conn)
-            else:
-                category = input("Category: ").strip()
-                brand = input("Brand: ").strip()
-                unit_type = unit_type_validation(input("Unit type: ").strip())
-                min_stock = num_validation(input("Minimum stock: "))
-                selling_price = num_validation(input("Selling price: "))
-                quantity = num_validation(input("Quantity: "))
-                product = Product(
-                name=name,
-                category=category,
-                brand=brand,
-                unit_type=unit_type,
-                selling_price=selling_price,
-                stock_quantity=0,
-                min_stock=min_stock,
-                )
-
-                product_id = insert_product(product, conn)
-
-                increase_product_stock(product_id, quantity, conn)
+                continue
             
-            
+            quantity = num_validation(input("Quantity: "))
             unit_cost = num_validation(input("Unit cost: "))
             expiration_date = date_validation(input("Expiration date: "))
+
+            increase_product_stock(product_id, quantity, conn)
 
             
             purchase_item = PurchaseItem(
@@ -75,15 +53,16 @@ def make_purchase():
             separator()
             more_products = input("Do you have more products in your purchase?(y/n): ").lower()
 
-            if more_products == "yes" or more_products == "y":
+            if more_products in ["y", "yes"]:
                 continue
-            elif more_products == "no" or more_products == "n":
+            elif more_products in ["n", "no"]:
                 break
             else:
                 print("Invalid option. Ending purchase.")
                 break
 
         conn.commit()
+
     except sqlite3.Error as e:
         print(f"Error: {e}")
         conn.rollback()
@@ -92,6 +71,79 @@ def make_purchase():
         print("Purchase completed successfully!")
     finally:
         conn.close()
+
+def get_or_create_product(conn):
+    separator()
+    name = input("Product name: ").strip().lower()
+
+    if product_exists(name, conn):
+        print("The product already exists.")
+        separator()
+        return get_product_id_by_name(name, conn)
+
+    print("New product detected. Please enter product data:")
+    separator()
+
+    product = collect_new_product_data(name)
+
+    if product is None:
+        return None
+
+    review_choice = review_product_data(product)
+
+    if review_choice == "2":
+        return get_or_create_product(conn)
+
+    if review_choice == "3":
+        return None
+
+    return insert_product(product, conn)
+
+def collect_new_product_data(name: str):
+    category = input("Category: ").strip()
+    brand = input("Brand: ").strip()
+    unit_type = unit_type_validation(input("Unit type: ").strip())
+    min_stock = num_validation(input("Minimum stock: "))
+    selling_price = num_validation(input("Selling price: "))
+
+    return Product(
+        name=name,
+        category=category,
+        brand=brand,
+        unit_type=unit_type,
+        selling_price=selling_price,
+        stock_quantity=0,
+        min_stock=min_stock
+    )
+
+def review_product_data(product: Product):
+    separator()
+    print("Review product data:")
+    print(
+        f"1. Name: {product.name}\n"
+        f"2. Category: {product.category}\n"
+        f"3. Brand: {product.brand}\n"
+        f"4. Unit type: {product.unit_type}\n"
+        f"5. Minimum stock: {product.min_stock}\n"
+        f"6. Selling price: {product.selling_price}"
+    )
+    separator()
+    print(
+        "1. Confirm\n"
+        "2. Re-enter product data\n"
+        "3. Cancel"
+    )
+    separator()
+
+    while True:
+        choice = input("Enter your choice: ").strip()
+
+        if choice in ["1", "2", "3"]:
+            return choice
+
+        print(f"{choice} is not a valid option. Try again!")
+        separator()
+
 
 def show_purchases():
     conn = create_connection()

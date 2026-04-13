@@ -128,7 +128,7 @@ def get_selling_price(product_id, conn):
     result = c.fetchone()
 
     if result is None:
-        return None
+        return 0
 
     return result[0]
 
