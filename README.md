@@ -2,6 +2,8 @@
 
 A command-line inventory management system built with **Python** and **SQLite**.
 
+##🚧 Project Canceled 🚧
+
 This project was created to practice software development fundamentals through a more realistic application structure.  
 The system allows the user to register products, record purchases and sales, and manage stock quantities using a local database.
 
